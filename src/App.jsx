@@ -10,13 +10,21 @@ import Auth from './components/Auth';
 import { ref } from 'firebase/storage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [logged, setLogged] = useState(false)
   
   const table1 = collection(database, 'tableName')
 
   useEffect(()=>{
-    getRecords(table1);
-  }, [])
+
+    if(auth?.currentUser?.getIdToken){
+      setLogged(true)
+    }
+    console.log("\nNot logged\n");
+  },[])
+
+  // useEffect(()=>{
+  //   getRecords(table1);
+  // }, [])
 
   async function getRecords(table){
       //Read data from database
@@ -92,7 +100,11 @@ function App() {
 
   return (
     <>
-      <Auth/>
+      {logged?
+        hi
+        :
+        <Auth/>
+      }
     </>
   )
 }

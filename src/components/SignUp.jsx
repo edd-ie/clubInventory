@@ -1,4 +1,8 @@
 import {React, useState} from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config/firebase-config'
+import { signUp } from '../config/authFx';
+
 import { Box, Flex, Skeleton, 
     Button, Text, Heading, Card, TextField,
     Callout, Select
@@ -44,6 +48,8 @@ export default function SignUp({setHasAccount}) {
         }
         setMatch(true);
         console.log(name+ " "+email+ " "+ password +" "+ confirmPassword + " "+ value);
+
+        signUp(auth, email, password)
     }
     
 

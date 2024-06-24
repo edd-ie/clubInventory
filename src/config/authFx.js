@@ -1,4 +1,4 @@
-export async function signUP() {
+export async function signUp(auth, email, password) {
 
     try {
         await createUserWithEmailAndPassword(auth, email, password);
@@ -10,9 +10,11 @@ export async function signUP() {
     }
 }
 
-export async function logIn() {
+export async function logIn(auth, email, password) {
 
     try {
+
+        auth?.currentUser
         await signInWithEmailAndPassword(auth, email, password);
 
         console.log(auth?.currentUser?.email);
