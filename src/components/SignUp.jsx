@@ -1,12 +1,12 @@
 import {React, useState} from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase-config'
 import { signUp } from '../config/authFx';
+import {members, addRecord } from '../config/Crud';
 
 import { Box, Flex, Skeleton, 
     Button, Text, Heading, Card, TextField,
     Callout, Select
  } from '@radix-ui/themes';
+import { auth } from '../config/firebase-config';
 
 export default function SignUp({setHasAccount}) {
 
@@ -32,6 +32,16 @@ export default function SignUp({setHasAccount}) {
         setConfirmPassword(event.target.value);
     };
 
+
+    const data = {
+        userId: '',
+        name: name,
+        email: email,
+        merit: 20,
+        specialization: value,
+        admin:false
+    };
+
     function handleSignUP(event) {
         event.preventDefault();
 
@@ -47,9 +57,10 @@ export default function SignUp({setHasAccount}) {
             return
         }
         setMatch(true);
-        console.log(name+ " "+email+ " "+ password +" "+ confirmPassword + " "+ value);
+        console.table(data);
 
-        signUp(auth, email, password)
+        const table = signUp(email, password, members, data)
+        console.table(table);
     }
     
 
@@ -106,7 +117,7 @@ export default function SignUp({setHasAccount}) {
                             </Skeleton>
 
                             <Skeleton loading={false} width="250px" height="20px">
-                                <TextField.Root placeholder="FirstName LastName" 
+                                <TextField.Root placeholder="Enter your name" 
                                     size="1" style={{width:"250px", fontSize:"10px"}}
                                     value={name}
                                     onChange={handleNameChange}

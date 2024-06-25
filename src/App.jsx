@@ -26,59 +26,7 @@ function App() {
   //   getRecords(table1);
   // }, [])
 
-  async function getRecords(table){
-      //Read data from database
-      try{
-        const data = await getDocs(table);
-        console.log(data.docs.map(doc => ({...doc.data(), id: doc.id})));
-      }
-      catch(error){
-        console.error(error.message);
-      }
-    }
-
-  async function addRecord(table, data){
-    try{
-      const docRef = await addDoc(table, data);
-      console.log("Document written with ID: ", docRef.id);
-
-      getRecords(table1);
-    }
-    catch(error){
-      console.error("Error adding document: ", error.message);
-    }
-  }
-
-  async function deleteRecord(table, id){
-    try{
-      // Add code to delete record from database
-      const record = doc(database, table, id);
-      await deleteDoc(record);
-    }
-    catch(error){
-      console.error("Error deleting document: ", error.message);
-    }
-  }
-
-  async function updateRecord(table, id, newData={column:"data"}){
-    try{
-      // Add code to delete record from database
-      const record = doc(database, table, id);
-      await updateDoc(record, newData);
-    }
-    catch(error){
-      console.error("Error deleting document: ", error.message);
-    }
-  }
-
-  async function getMedia(){
-    try{
-      // Add code to get media from storage
-    }
-    catch(error){
-      console.error("Error getting media: ", error.message);
-    }
-  }
+  
 
   const[fileUpload, setFileUpload] = useState(null);
   // use input type="file"
@@ -101,7 +49,7 @@ function App() {
   return (
     <>
       {logged?
-        hi
+        <p>hi</p>
         :
         <Auth/>
       }
