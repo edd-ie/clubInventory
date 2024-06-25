@@ -1,6 +1,5 @@
 import {React, useState} from 'react';
 import { signUp } from '../config/authFx';
-import {members, addRecord } from '../config/Crud';
 
 import { Box, Flex, Skeleton, 
     Button, Text, Heading, Card, TextField,
@@ -8,7 +7,7 @@ import { Box, Flex, Skeleton,
  } from '@radix-ui/themes';
 import { auth } from '../config/firebase-config';
 
-export default function SignUp({setHasAccount}) {
+export default function SignUp({setHasAccount, setUser}) {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -59,8 +58,9 @@ export default function SignUp({setHasAccount}) {
         setMatch(true);
         console.table(data);
 
-        const table = signUp(email, password, members, data)
-        console.table(table);
+        let result = signUp(data, password);
+        console.log(result);
+        setUser(result);
     }
     
 

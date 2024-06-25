@@ -4,8 +4,11 @@ import { Box, Flex, Skeleton,
     Callout, Link
  } from '@radix-ui/themes';
 
+ import { logIn } from "../config/authFx";
 
-export default function Login({setHasAccount}) {
+
+
+export default function Login({setHasAccount, setUser}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,6 +29,13 @@ export default function Login({setHasAccount}) {
             return
         }
         setMiss(false)
+
+        
+        let result = logIn(email, password).then(
+            ()=>{
+                setUser(result)
+            }
+        )
     }
 
     return (
@@ -66,7 +76,7 @@ export default function Login({setHasAccount}) {
                             <Skeleton loading={false} width="250px" height="20px">
                                 <TextField.Root type="email" placeholder="Enter your email address" 
                                     size="1" style={{width:"250px", fontSize:"10px"}}
-                                    value={email}
+                                    value={email} required
                                     onChange={handleEmailChange}
                                     />
                             </Skeleton>

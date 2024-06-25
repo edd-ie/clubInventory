@@ -1,34 +1,37 @@
 import { auth } from './firebase-config';
-import { members, addRecord } from './Crud';
+import { members, addRecord, getRecord } from './Crud';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, signInWithPopup } from 'firebase/auth';
 
-export async function signUp(email, password, table, data) {
+export async function signUp(data, password) {
 
     try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await createUserWithEmailAndPassword(auth, data.email, password);
 
         if (auth?.currentUser?.getIdToken) {
             data.userId = auth?.currentUser?.uid;
-            return await addRecord(table, data, 1, auth?.currentUser?.uid);
+            await addRecord(members, data);
+            return true;
         }
     }
     catch (error) {
-        console.error(error.message);
+        alert(error.message);
+        return false;
     }
 }
 
 export async function logIn(email, password) {
 
     try {
-
-        auth?.currentUser
         await signInWithEmailAndPassword(auth, email, password);
 
-        console.log(auth?.currentUser?.email);
+        if (auth?.currentUser?.getIdToken) {
+            return true
+        }
     }
     catch (error) {
-        console.error(error.message);
+        alert(error.message);
     }
+    return false;
 }
 
 export async function googleSignIn() {

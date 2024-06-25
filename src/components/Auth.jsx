@@ -7,12 +7,12 @@ import SignUp from './SignUp'
 
 
 
-export default function Auth() {
+export default function Auth({setLogged}) {
     const [hasAccount, setHasAccount] = useState(true)
 
     return (
         <>
-            {hasAccount ? <Login setHasAccount={setHasAccount}/> : <SignUp setHasAccount={setHasAccount}/>}
+            {hasAccount ? <Login setHasAccount={setHasAccount} setUser={setLogged}/> : <SignUp setHasAccount={setHasAccount} setUser={setLogged}/>}
         </>
     )
 }

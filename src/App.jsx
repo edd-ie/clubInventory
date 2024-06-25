@@ -1,57 +1,50 @@
-import { uploadBytes } from 'firebase/storage';
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Flex, Text, Button } from '@radix-ui/themes';
 
-import {auth, database, storage } from './config/firebase-config';
-import { getDocs, collection, addDoc, deleteDoc, doc, updateDoc} from 'firebase/firestore';
+import {auth} from './config/firebase-config';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Auth from './components/Auth';
-import { ref } from 'firebase/storage';
+import { getRecord, members } from './config/Crud';
+import { logOut } from './config/authFx';
 
 function App() {
   const [logged, setLogged] = useState(false)
-  
-  const table1 = collection(database, 'tableName')
+  const [user, setUser] = useState({})
+  const [data, setData] = useState({})
 
-  useEffect(()=>{
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setLogged(true);
 
-    if(auth?.currentUser?.getIdToken){
-      setLogged(true)
-    }
-    console.log("\nNot logged\n");
-  },[])
+        if (logged) {
+          let data = getRecord(members, "userId", auth?.currentUser?.uid);
 
-  // useEffect(()=>{
-  //   getRecords(table1);
-  // }, [])
-
-  
-
-  const[fileUpload, setFileUpload] = useState(null);
-  // use input type="file"
-  // onChange((e)=>setFileUpload(e.target.files[0]))
-  // button onClick(()=>uploadMedia())
-  async function uploadMedia(folderName=`Categories/${fileUpload.name}`){
-    // Add code to upload file to storage
-    if(fileUpload){
-      try{
-        const storageRef = ref(storage, folderName);
-        await uploadBytes(storageRef, fileUpload);
-        setFileUpload(null);
+          setData(data);
+          for(const key in data) {
+            console.log(key, data[key]);
+          }
+        }
+        
+      } else {
+        setLogged(false);
       }
-      catch(error){
-        console.error("Error uploading file: ", error.message);
-      }
-    }
-  }
+    });
+
+    unsubscribe();
+
+    // Cleanup function to prevent memory leaks
+    // return () => unsubscribe();
+  }, []);
+
 
   return (
     <>
       {logged?
-        <p>hi</p>
+        <button onClick={()=>{logOut(); setLogged(false)}}>loggout</button>
         :
-        <Auth/>
+        <Auth setLogged={setLogged}/>
       }
     </>
   )
