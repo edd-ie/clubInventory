@@ -158,7 +158,7 @@ export default function Dashboard() {
 
                         <AlertDialog.Root>
                             <AlertDialog.Trigger>
-                                <Button color="red" size="1" width="4vw">Logout</Button>
+                                <Button variant="outline" color="red" size="1" width="4vw">Logout</Button>
                             </AlertDialog.Trigger>
                             <AlertDialog.Content maxWidth="300px" size="1">
                                 <AlertDialog.Title size="2">Revoke access</AlertDialog.Title>
