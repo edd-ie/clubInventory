@@ -29,7 +29,6 @@ export default function Login({setHasAccount, setUser}) {
             return
         }
         setMiss(false)
-
         
         let result = logIn(email, password).then(
             ()=>{
