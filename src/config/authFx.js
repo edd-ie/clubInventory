@@ -23,15 +23,11 @@ export async function logIn(email, password) {
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
-
-        if (auth?.currentUser?.getIdToken) {
-            return true
-        }
     }
     catch (error) {
-        alert(error.message);
+        alert(error.message)
     }
-    return false;
+
 }
 
 export async function googleSignIn() {

@@ -7,10 +7,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Auth from './components/Auth';
 import { getRecord, members } from './config/Crud';
 import { logOut } from './config/authFx';
+import Dashboard from './components/Dashboard';
 
 function App() {
   const [logged, setLogged] = useState(false)
-  const [user, setUser] = useState({})
   const [data, setData] = useState({})
 
   useEffect(() => {
@@ -18,31 +18,29 @@ function App() {
       if (currentUser) {
         setLogged(true);
 
-        if (logged) {
-          let data = getRecord(members, "userId", auth?.currentUser?.uid);
+        let user = getRecord(members, "userId", auth?.currentUser?.uid);
 
-          setData(data);
-          for(const key in data) {
-            console.log(key, data[key]);
-          }
-        }
+          setData(user);
+          
         
       } else {
         setLogged(false);
       }
     });
 
-    unsubscribe();
-
     // Cleanup function to prevent memory leaks
-    // return () => unsubscribe();
+    return () => unsubscribe();
   }, []);
 
+  console.table(data)
 
   return (
     <>
       {logged?
-        <button onClick={()=>{logOut(); setLogged(false)}}>loggout</button>
+        <>
+          {/* <button onClick={()=>{logOut(); setLogged(false)}}>loggout</button> */}
+          <Dashboard/>
+        </>
         :
         <Auth setLogged={setLogged}/>
       }

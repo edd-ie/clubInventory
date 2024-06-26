@@ -18,14 +18,7 @@ export async function getRecord(table, fieldName, value) {
 
     try {
         const raw = await getDocs(sql);
-
-        // Handle multiple documents
-        if (raw.size === 1) {
-            // Exactly one document found, access its data
-            const doc = raw.docs[0];
-            return { ...doc.data(), id: doc.id }; // Return data with ID
-        }
-        else if (raw.size > 1) {
+        if (raw.size > 0) {
             const data = raw.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             return data;
         } else {

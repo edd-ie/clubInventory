@@ -12,7 +12,7 @@ export default function Auth({setLogged}) {
 
     return (
         <>
-            {hasAccount ? <Login setHasAccount={setHasAccount} setUser={setLogged}/> : <SignUp setHasAccount={setHasAccount} setUser={setLogged}/>}
+            {hasAccount ? <Login setHasAccount={setHasAccount}/> : <SignUp setHasAccount={setHasAccount} setUser={setLogged}/>}
         </>
     )
 }

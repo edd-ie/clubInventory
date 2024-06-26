@@ -5,10 +5,11 @@ import { Box, Flex, Skeleton,
  } from '@radix-ui/themes';
 
  import { logIn } from "../config/authFx";
+import { auth } from "../config/firebase-config";
 
 
 
-export default function Login({setHasAccount, setUser}) {
+export default function Login({setHasAccount}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,11 +31,8 @@ export default function Login({setHasAccount, setUser}) {
         }
         setMiss(false)
         
-        let result = logIn(email, password).then(
-            ()=>{
-                setUser(result)
-            }
-        )
+        logIn(email, password);
+        if(auth?.currentUser?.uid){console.log(auth?.currentUser?.uid);}
     }
 
     return (
