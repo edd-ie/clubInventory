@@ -163,7 +163,7 @@ export default function Dashboard() {
                             <AlertDialog.Content maxWidth="300px" size="1">
                                 <AlertDialog.Title size="2">Revoke access</AlertDialog.Title>
                                 <AlertDialog.Description size="1">
-                                Are you sure? All existing sessions will be terminated.
+                                Are you sure? The current session will be terminated.
                                 </AlertDialog.Description>
 
                                 <Flex gap="3" mt="4" justify="end">
