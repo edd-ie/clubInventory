@@ -4,7 +4,8 @@ import { query, where, getDocs} from 'firebase/firestore';
 
 import { Box, Flex, Skeleton, Separator,
     Button, Text, Heading, Card, TextField,
-    Callout, Avatar,DataList, AlertDialog, Badge, IconButton
+    Callout, Avatar,DataList, AlertDialog, Badge, IconButton,
+    Strong
  } from '@radix-ui/themes';
 import { auth } from "../config/firebase-config";
 import { logOut } from "../config/authFx";
@@ -12,6 +13,7 @@ import { logOut } from "../config/authFx";
 
 export default function Dashboard() {
     const [users, setUsers] = useState([]); // Initialize users state as an empty array
+    const [initials, setInitials] = useState("HI");
 
     useEffect(() => {
         async function run(){
@@ -23,6 +25,8 @@ export default function Dashboard() {
                     const data = raw.docs.map(doc => ({ ...doc.data(), id: doc.id }));
                     
                     // setUsers(data);
+                    setInitials(extractFirstLetters(data[0].name));
+                    console.log(initials);
                 }
             } catch (error) {
                 console.error("Error getting documents:", error);
@@ -65,6 +69,7 @@ export default function Dashboard() {
             padding:"0"
             }}
         >
+            {/* Sidebar */}
             <Flex gap="3" width="15vw" height="100vh" 
                 style={{
                     display:"flex", flexDirection:"column",
@@ -73,12 +78,32 @@ export default function Dashboard() {
                 }}
             >
 
-                <Skeleton loading={isLoading} height="9vh" width="13vw" 
+                <Skeleton loading={false} height="9vh" width="13vw" 
                     style={{
                         marginTop:"10px",
                         padding:"0"
                     }}
                 >
+                    {/* App logo and name */}
+                    <Flex direction="row" height="9vh" width="13vw" gap="2"
+                        style={{
+                        marginTop:"10px", alignItems:"center", 
+                        padding:"0"
+                        }}
+                    >
+                        <Avatar
+                            // src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
+                            fallback={initials}
+                            size="2"
+                        />
+
+                        <Text as="div" size="1">
+                            <Strong>
+                                UNB <br></br> Robotics
+                            </Strong>
+                        </Text>
+
+                    </Flex>
 
                 </Skeleton>
 
@@ -87,11 +112,30 @@ export default function Dashboard() {
                     <Separator orientation="horizontal" size="4" />
                 </Flex>
 
-                <Skeleton loading={isLoading} height="30vh" width="13vw" 
+                <Skeleton loading={false} height="26vh" width="13vw" 
                     style={{
                         padding:"0"
                     }}
                 >
+                    {/* Content nav bar */}
+                    <Flex  direction="column" height="26vh" width="13vw" gap="3">
+                        <Card size="2" >
+                            <Flex  align="center" gap="1"
+                            >
+                            </Flex>
+                        </Card>
+
+                        <Card size="2">
+                            <Flex  align="center" gap="1">
+                            </Flex>
+                        </Card>
+
+                        <Card size="2">
+                            <Flex  align="center" gap="1">
+                            </Flex>
+                        </Card>
+
+                    </Flex>
 
                 </Skeleton>
 
@@ -119,7 +163,7 @@ export default function Dashboard() {
 
             </Flex>
 
-
+            {/* Main section */}
             <Flex gap="3" direction="column" width="85vw" height="100vh" 
                 style={{
                     alignItems:"center", justifyContent:"center",
@@ -214,4 +258,18 @@ export default function Dashboard() {
             </Flex>
         </Box> 
     )
+}
+
+
+function extractFirstLetters(text) {
+  // Split the text into an array of words
+  const words = text.split(' ');
+
+  // Check if there are at least two words
+  if (words.length < 2) {
+    return ""; // If not, return an empty string
+  }
+
+  // Extract and combine the first letters of the first two words
+  return words[0][0] + words[1][0];
 }
