@@ -9,11 +9,31 @@ import { Box, Flex, Skeleton, Separator,
  } from '@radix-ui/themes';
 import { auth } from "../config/firebase-config";
 import { logOut } from "../config/authFx";
+import { ArchiveIcon, LayersIcon, StopwatchIcon } from "@radix-ui/react-icons";
 
 
 export default function Dashboard() {
     const [users, setUsers] = useState([]); // Initialize users state as an empty array
     const [initials, setInitials] = useState("HI");
+    const borders = ["#d6ebfd30", "#d8f4f609"]
+
+    let active = "tab1";
+
+    function pickBorder(id){
+        if(id === active){
+            return borders[0]
+        }
+        return borders[1]
+    }
+
+    function handleTabSwitch(e){
+        let prev = document.getElementById(active);
+        let current = document.getElementById(e)
+        prev.style.borderColor = borders[1]
+        current.style.borderColor = borders[0]
+        
+        active = e;
+    }
 
     useEffect(() => {
         async function run(){
@@ -119,21 +139,34 @@ export default function Dashboard() {
                 >
                     {/* Content nav bar */}
                     <Flex  direction="column" height="26vh" width="13vw" gap="3">
-                        <Card size="2" >
-                            <Flex  align="center" gap="1"
-                            >
-                            </Flex>
-                        </Card>
+                        <Flex id="tab1" direction="row" height="8vh" align="center" gap="2" 
+                            style={{background:"#d8f4f609", paddingLeft:"12px", 
+                                border:`1px solid  ${pickBorder("tab1")}`, borderRadius:"6px", cursor:"pointer"}}
+                            onClick={()=>handleTabSwitch("tab1")}
+                        >
+                            <ArchiveIcon />
+                            <Text size="2" as="p">Inventory</Text>
+                        </Flex>
+                        
+                        <Flex id="tab2" direction="row" height="8vh" align="center" gap="2" 
+                            style={{background:"#d8f4f609", paddingLeft:"12px", 
+                                border:`1px solid  ${pickBorder("tab2")}`, borderRadius:"6px", cursor:"pointer"}}
+                            onClick={()=>handleTabSwitch("tab2")}
+                        >
+                            <LayersIcon />
+                            <Text size="2" as="p">Borrowed</Text>
+                        </Flex>
+                        
+                        <Flex id="tab3" direction="row" height="8vh" align="center" gap="2" 
+                            style={{background:"#d8f4f609", paddingLeft:"12px", 
+                                border:`1px solid  ${pickBorder("tab3")}`, borderRadius:"6px", cursor:"pointer"}}
+                            onClick={()=>handleTabSwitch("tab3")}
+                        >
+                            <StopwatchIcon />
+                            <Text size="2" as="p">History</Text>
+                        </Flex>
 
-                        <Card size="2">
-                            <Flex  align="center" gap="1">
-                            </Flex>
-                        </Card>
-
-                        <Card size="2">
-                            <Flex  align="center" gap="1">
-                            </Flex>
-                        </Card>
+                        
 
                     </Flex>
 
