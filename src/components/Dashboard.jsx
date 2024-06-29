@@ -9,7 +9,7 @@ import { Box, Flex, Skeleton, Separator,
  } from '@radix-ui/themes';
 import { auth } from "../config/firebase-config";
 import { logOut } from "../config/authFx";
-import { ArchiveIcon, LayersIcon, StopwatchIcon } from "@radix-ui/react-icons";
+import { ArchiveIcon, ExitIcon, LayersIcon, StopwatchIcon } from "@radix-ui/react-icons";
 
 
 export default function Dashboard() {
@@ -235,10 +235,12 @@ export default function Dashboard() {
 
                         <AlertDialog.Root>
                             <AlertDialog.Trigger>
-                                <Button variant="outline" color="red" size="1" width="4vw">Logout</Button>
+                                <Button variant="soft" color="gray" size="1" >
+                                    <ExitIcon style={{width:"9px", color:"red"}}/>
+                                </Button>
                             </AlertDialog.Trigger>
-                            <AlertDialog.Content maxWidth="300px" size="1">
-                                <AlertDialog.Title size="2">Revoke access</AlertDialog.Title>
+                            <AlertDialog.Content maxWidth="290px" size="1" style={{paddingTop:"15px"}}>
+                                <AlertDialog.Title size="2">Log Out</AlertDialog.Title>
                                 <AlertDialog.Description size="1">
                                 Are you sure? The current session will be terminated.
                                 </AlertDialog.Description>
