@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {members} from '../config/Crud'
+import {members, categories, getAllRecords} from '../config/Crud'
 import { query, where, getDocs} from 'firebase/firestore';
 
 import { Box, Flex, Skeleton, Separator,
-    Button, Text, Heading, Card, TextField,
+    Button, Text, Inset, Card, ScrollArea,
     Callout, Avatar,DataList, AlertDialog, Badge, IconButton,
-    Strong
+    Strong, Grid,
+    Heading
  } from '@radix-ui/themes';
 import { auth } from "../config/firebase-config";
 import { logOut } from "../config/authFx";
 import { ArchiveIcon, ExitIcon, LayersIcon, StopwatchIcon } from "@radix-ui/react-icons";
 
 
+
 export default function Dashboard() {
     const [users, setUsers] = useState([]); // Initialize users state as an empty array
     const [initials, setInitials] = useState("HI");
     const borders = ["#d6ebfd30", "#d8f4f609"]
+    const [tags, setTags] = useState([])
 
     let active = "tab1";
 
@@ -46,8 +49,11 @@ export default function Dashboard() {
                     
                     // setUsers(data);
                     setInitials(extractFirstLetters(data[0].name));
-                    console.log(initials);
                 }
+
+                const set = await getAllRecords(categories);
+                setTags(set)
+                console.table(tags)
             } catch (error) {
                 console.error("Error getting documents:", error);
                 alert("Error getting documents");
@@ -66,7 +72,31 @@ export default function Dashboard() {
         </div>
     ));
 
-    console.table("data\n"+users);
+    const displayTags = tags.map((tag) => (
+        <Flex direction="column" width="140px" style={{ borderRadius:"2px", border:`0px solid ${borders[1]}`}}>
+                    <img
+                        src={tag.imageUrl}
+                        alt="Bold typography"
+                        style={{
+                        display: 'block',
+                        objectFit: 'cover',
+                        width: '100%',
+                        height: "110px",
+                        backgroundColor: 'black',
+                        margin:"0",
+                        borderTopRightRadius:"2px", borderTopLeftRadius:"2px"
+                        }}
+                    />
+                    <Flex width="140px" height="30px" gap="1" justify="center"
+                    style={{background:`#ddeaf814`, paddingLeft:"5px",  marginTop:"0", 
+                        borderBottomRightRadius:"2px", borderBottomLeftRadius:"2px"}} direction="column">
+                        <Text as="label" size="2">
+                            <Strong>{tag.tag}</Strong>
+                        </Text>
+                    </Flex>
+        </Flex>
+    ))
+    
 
     // Optionally, display a loading indicator while fetching data:
     const isLoading = users.length === 0; // Check if users array is empty
@@ -203,7 +233,7 @@ export default function Dashboard() {
                     padding:"0"
                 }}
             >
-
+                {/* Top section */}
                 <Flex gap="3" direction="row" width="83vw" height="6vh" 
                     style={{
                         alignItems:"center", justifyContent:"center",
@@ -211,6 +241,7 @@ export default function Dashboard() {
                     }}
                 >
 
+                    {/* 1st section */}
                     <Skeleton loading={isLoading} height="5vh" width="10vw" 
                         style={{
                             padding:"0"
@@ -219,6 +250,7 @@ export default function Dashboard() {
 
                     </Skeleton>
 
+                    {/* Search bar */}
                     <Skeleton loading={isLoading} height="5vh" width="68vw" 
                         style={{
                             padding:"0"
@@ -226,7 +258,8 @@ export default function Dashboard() {
                     >
 
                     </Skeleton>
-                    
+
+                    {/* Log out button */}
                     <Skeleton loading={isLoading} height="5vh" width="4vw" 
                         style={{
                             padding:"0"
@@ -265,12 +298,15 @@ export default function Dashboard() {
 
                 </Flex>
 
+                {/* Content section */}
                 <Flex gap="3" direction="column" width="83vw" height="88vh" 
                     style={{
                         alignItems:"center", justifyContent:"center",
                         padding:"0"
                     }}
                 >
+
+                    {/* Filters */}
                     <Skeleton loading={isLoading} height="7vh" width="83vw" 
                         style={{
                             padding:"0"
@@ -279,11 +315,17 @@ export default function Dashboard() {
 
                     </Skeleton>
 
-                    <Skeleton loading={isLoading} height="83vh" width="83vw" 
+                    {/* Content display */}
+                    <Skeleton loading={false} height="83vh" width="83vw" 
                         style={{
                             padding:"0"
                         }}
                     >
+                    <ScrollArea type="always" scrollbars="vertical" style={{ height:"83vh", width:"83vw"}}>
+                        <Grid columns="3" gap="4" width="60vw" style={{paddingTop:"10px", paddingLeft:"0px", marginLeft:"25vh"}}>
+                        {displayTags}
+                        </Grid>
+                    </ScrollArea>
 
                     </Skeleton>
 
@@ -299,11 +341,6 @@ export default function Dashboard() {
 function extractFirstLetters(text) {
   // Split the text into an array of words
   const words = text.split(' ');
-
-  // Check if there are at least two words
-  if (words.length < 2) {
-    return ""; // If not, return an empty string
-  }
 
   // Extract and combine the first letters of the first two words
   return words[0][0] + words[1][0];

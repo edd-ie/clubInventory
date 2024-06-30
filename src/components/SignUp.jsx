@@ -44,18 +44,38 @@ export default function SignUp({setHasAccount, setUser}) {
     function handleSignUP(event) {
         event.preventDefault();
 
+        let nameCheck = name.split(" ")
+
+        setMatch(true);
+        setMiss(false);
+
         if(password ==='' || email ==='' || name ===''|| confirmPassword ==='') {
-            setMatch(true);
             setMiss(true)
             return
         }
-        setMiss(false)
-
+        
         if(password !== confirmPassword) {
             setMatch(false)
             return
         }
-        setMatch(true);
+
+        if(nameCheck.length < 2) {
+            alert("Please enter your first and last name")
+            setMiss(true)
+            return
+        }
+
+        if(!email.includes("@")) {
+            alert("Please enter a valid email address")
+            setMiss(true)
+            return
+        }
+
+        if(password.length < 8) {
+            alert("Please enter a password with at least 8 characters")
+            setMiss(true)
+            return
+        }
         console.table(data);
 
         let result = signUp(data, password);
