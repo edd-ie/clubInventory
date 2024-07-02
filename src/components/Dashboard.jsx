@@ -324,7 +324,7 @@ export default function Dashboard() {
                     <ScrollArea type="always" scrollbars="vertical" style={{ height:"83vh", width:"83vw"}}>
                         <Grid columns="3" gap="4" width="60vw" 
                         style={{paddingTop:"10px", paddingLeft:"0px", marginLeft:"25vh"}}>
-                        {displayTags}
+                            {displayTags}
                         </Grid>
                     </ScrollArea>
 
